@@ -3,7 +3,6 @@ FROM php:8.2-fpm-alpine # Or another suitable PHP-FPM version (e.g., 8.1, 8.3)
 
 # Install Nginx and other necessary packages
 RUN apk add --no-cache nginx \
-    # Install common PHP extensions
     php-pdo_mysql \
     php-json \
     php-mbstring \
