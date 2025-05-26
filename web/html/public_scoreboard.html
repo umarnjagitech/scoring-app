@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Scoreboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        .table-container {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .highlight-gold { background-color: #FFD700; }
+        .highlight-silver { background-color: #C0C0C0; }
+        .highlight-bronze { background-color: #CD7F32; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <div class="container mx-auto p-4 flex-grow">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Public Scoreboard</h1>
+
+            <div id="message-area" class="mb-4 text-center"></div>
+
+            <p class="text-center text-sm text-gray-600 mb-4">Auto-refreshing every 10 seconds.</p>
+            <button id="refresh-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out block mx-auto mb-4">
+                Refresh Now
+            </button>
+
+            <div class="table-container border border-gray-200 rounded-lg">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-blue-600 text-white sticky top-0 z-10">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider rounded-tl-lg">Rank</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Participant</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider rounded-tr-lg">Total Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoreboard-body" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 text-center space-x-4">
+                <a href="judge_login.html" class="text-green-600 hover:underline">Judge Portal Login</a>
+                <a href="admin_judges.html" class="text-purple-600 hover:underline">Admin: Manage Judges</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/public_scoreboard.js"></script>
+</body>
+</html>
