@@ -12,7 +12,7 @@ RUN apk add --no-cache nginx \
     && rm -rf /var/cache/apk/*
 
 # Copy Nginx configuration
-COPY nginx/default.conf /etc/nginx/http.d/default.conf
+COPY nginx/000-default.conf /etc/nginx/http.d/default.conf
 
 # Copy your application code
 COPY html/ /var/www/html/
