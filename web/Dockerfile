@@ -15,7 +15,7 @@ RUN apk add --no-cache nginx \
 COPY web/nginx/default.conf /etc/nginx/http.d/default.conf
 
 # Copy your application code
-COPY web/html/ /var/www/html/
+COPY html/ /var/www/html/
 
 # Fix permissions
 RUN chown -R www-data:www-data /var/www/html \
