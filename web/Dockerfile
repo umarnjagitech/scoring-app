@@ -1,43 +1,29 @@
 # web/Dockerfile
-# Use the official PHP 8.2 Apache image as a base
-FROM php:8.2-apache
+FROM php:8.2-fpm-alpine # Or another suitable PHP-FPM version (e.g., 8.1, 8.3)
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    libzip-dev \
-    libpng-dev \
-    libjpeg-dev \
-    git \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+# Install Nginx and other necessary packages
+RUN apk add --no-cache nginx \
+    # Install common PHP extensions
+    php-pdo_mysql \
+    php-json \
+    php-mbstring \
+    php-xml \
+    php-curl \
+    # Clean up cache
+    && rm -rf /var/cache/apk/*
 
-# Install PHP extensions
-# pdo_mysql is crucial for database connection
-RUN docker-php-ext-install pdo pdo_mysql gd zip
+# Copy Nginx configuration
+COPY web/nginx/default.conf /etc/nginx/http.d/default.conf
 
-# Enable Apache rewrite module (for cleaner URLs if needed, good practice)
-RUN a2enmod rewrite
+# Copy your application code
+COPY web/html/ /var/www/html/
 
-# Copy custom Apache virtual host configuration
-# This ensures our app runs from /var/www/html and allows .htaccess if needed
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-
-# Remove default Apache index.html (optional, our index.html will replace it)
-RUN rm /var/www/html/index.html || true
-
-# Copy the application source code into the container's web root
-# We use a named volume in docker-compose for development, so this is mainly for production builds
-# For development, the volume mount will override this.
-COPY html/ /var/www/html/
-
-# Set appropriate permissions for the web root
+# Fix permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && find /var/www/html -type d -exec chmod 755 {} \; \
-    && find /var/www/html -type f -exec chmod 644 {} \;
+    && chmod -R 755 /var/www/html
 
-# Expose port 80 (Apache's default)
+# Expose port 80 (for Nginx)
 EXPOSE 80
 
-# The default command for php:apache images is to start Apache
-# CMD ["apache2-foreground"]
+# Command to run Nginx and PHP-FPM
+CMD sh -c "php-fpm && nginx -g 'daemon off;'"
